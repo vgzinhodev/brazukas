@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BraZuKas Roleplay Server</title>
+    <link rel="icon" type="image/png" href="imgs/favi.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a4d4d 0%, #2d7373 50%, #1a4d4d 100%);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Efeito de movimento com o mouse */
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            transition: transform 0.1s ease-out;
+        }
+
+        .parallax-layer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(79, 209, 197, 0.1) 0%, transparent 50%);
+        }
+
+        /* Header com redes sociais */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(79, 209, 197, 0.2);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(79, 209, 197, 0.1);
+            border: 1px solid rgba(79, 209, 197, 0.3);
+            border-radius: 50%;
+            color: #4fd1c5;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: rgba(79, 209, 197, 0.3);
+            transform: translateY(-3px);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-btn {
+            padding: 0.6rem 1.5rem;
+            background: rgba(79, 209, 197, 0.1);
+            border: 1px solid rgba(79, 209, 197, 0.3);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: rgba(79, 209, 197, 0.2);
+            transform: translateY(-2px);
+        }
+
+        header {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-top: 80px;
+        }
+
+        .logo-container {
+            margin-bottom: 3rem;
+            animation: fadeInDown 1s ease;
+        }
+
+        .logo-img {
+            max-width: 500px;
+            width: 90%;
+            height: auto;
+            filter: drop-shadow(0 10px 30px rgba(79, 209, 197, 0.3));
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            color: #fff;
+            font-weight: 300;
+            letter-spacing: 0.15rem;
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .btn {
+            padding: 1.2rem 3rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            border: 2px solid #4fd1c5;
+            border-radius: 50px;
+            color: #fff;
+            background: rgba(79, 209, 197, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(79, 209, 197, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn:hover {
+            background: rgba(79, 209, 197, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(79, 209, 197, 0.3);
+        }
+
+        .btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4fd1c5, #2d9e94);
+            border: none;
+        }
+
+        /* Galeria de fotos */
+        .gallery-section {
+            padding: 5rem 0;
+            background: rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 0 2rem;
+        }
+
+        .gallery-header h2 {
+            font-size: 2.5rem;
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+
+        .gallery-header p {
+            color: #c5e8e5;
+            font-size: 1.1rem;
+        }
+
+        .gallery-container {
+            display: flex;
+            gap: 2rem;
+            padding: 2rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: #4fd1c5 rgba(79, 209, 197, 0.1);
+        }
+
+        .gallery-container::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .gallery-container::-webkit-scrollbar-track {
+            background: rgba(79, 209, 197, 0.1);
+            border-radius: 10px;
+        }
+
+        .gallery-container::-webkit-scrollbar-thumb {
+            background: #4fd1c5;
+            border-radius: 10px;
+        }
+
+        .gallery-item {
+            min-width: 400px;
+            background: rgba(79, 209, 197, 0.05);
+            border: 1px solid rgba(79, 209, 197, 0.2);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(79, 209, 197, 0.3);
+        }
+
+        .gallery-img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #2d7373, #1a4d4d);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4fd1c5;
+            font-size: 3rem;
+        }
+
+        .gallery-info {
+            padding: 1.5rem;
+        }
+
+        .gallery-info h3 {
+            color: #4fd1c5;
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .gallery-info p {
+            color: #c5e8e5;
+            line-height: 1.6;
+        }
+
+        .features {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .features-subtitle {
+            text-align: center;
+            color: #c5e8e5;
+            margin-bottom: 3rem;
+            font-size: 1.1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(79, 209, 197, 0.05);
+            border: 1px solid rgba(79, 209, 197, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(79, 209, 197, 0.1);
+            box-shadow: 0 15px 40px rgba(79, 209, 197, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #4fd1c5;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #4fd1c5;
+        }
+
+        .feature-card p {
+            line-height: 1.6;
+            color: #c5e8e5;
+        }
+
+        .stats {
+            padding: 5rem 2rem;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .stats-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 3.5rem;
+            color: #4fd1c5;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-item p {
+            font-size: 1.2rem;
+            color: #c5e8e5;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
+        }
+
+        footer {
+            padding: 3rem 2rem;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%);
+            border-top: 1px solid rgba(79, 209, 197, 0.2);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            color: #4fd1c5;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .footer-section p,
+        .footer-section a {
+            color: #c5e8e5;
+            text-decoration: none;
+            line-height: 1.8;
+            display: block;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #4fd1c5;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(79, 209, 197, 0.1);
+            color: #c5e8e5;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .top-bar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .nav-buttons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .features h2 {
+                font-size: 2rem;
+            }
+
+            .gallery-item {
+                min-width: 300px;
+            }
+
+            .gallery-img {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="parallax-bg">
+        <div class="parallax-layer"></div>
+    </div>
+
+    <div class="top-bar">
+        <div class="social-links">
+            <a href="https://discord.gg/aRFAvMZYfq" class="social-link" title="Discord">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
+                </svg>
+            </a>
+            <a href="https://www.facebook.com/BraZukasServer" class="social-link" title="Facebook">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669c1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+            </a>
+            <a href="https://www.instagram.com/brazukaserver" class="social-link" title="Instagram">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07c3.252.148 4.771 1.691 4.919 4.919c.058 1.265.069 1.645.069 4.849c0 3.205-.012 3.584-.069 4.849c-.149 3.225-1.664 4.771-4.919 4.919c-1.266.058-1.644.07-4.85.07c-3.204 0-3.584-.012-4.849-.07c-3.26-.149-4.771-1.699-4.919-4.92c-.058-1.265-.07-1.644-.07-4.849c0-3.204.013-3.583.07-4.849c.149-3.227 1.664-4.771 4.919-4.919c1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072C2.695.272.273 2.69.073 7.052C.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948c.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072c4.354-.2 6.782-2.618 6.979-6.98c.059-1.28.073-1.689.073-4.948c0-3.259-.014-3.667-.072-4.947c-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324a6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8a4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881a1.44 1.44 0 0 0 0-2.881z"/>
+                </svg>
+            </a>
+        </div>
+        <div class="nav-buttons">
+            <a href="loja.brazukasserver.com.br" class="nav-btn">🛒 Loja</a>
+            <a href="regras.brazukasserver.com.br" class="nav-btn">📋 Regras</a>
+            <a href="https://discord.gg/aRFAvMZYfq" class="nav-btn">💬 Discord</a>
+        </div>
+    </div>
+
+    <header>
+        <div class="logo-container">
+            <img src="imgs/logo.png" alt="BraZuKas RP" class="logo-img">
+            <p class="subtitle">O servidor feito para sua diversão!</p>
+        </div>
+        <div class="cta-buttons">
+            <a href="https://discord.gg/aRFAvMZYfq" class="btn btn-primary"><span>🎮 Jogar Agora</span></a>
+            <a href="#sobre" class="btn"><span>📖 Saiba Mais</span></a>
+        </div>
+    </header>
+
+    <section class="gallery-section">
+        <div class="gallery-header">
+            <h2>Nossa História</h2>
+            <p>Momentos marcantes da nossa comunidade nesses 10 anos</p>
+        </div>
+        <div class="gallery-container">
+            <a href="https://www.facebook.com/photo.php?fbid=773041614829159&set=pb.100063699814178.-2207520000&type=3" target="_blank" class="gallery-item">
+                <img src="imgs/RPV2.jpg" class="gallery-img" style="object-fit: cover;">
+                <div class="gallery-info">
+                    <h3>Roleplay</h3>
+                    <p>Julho de 2023 - Última versão do BraZuKas Roleplay!</p>
+                </div>
+            </a>
+
+            <a href="https://www.facebook.com/BraZukasServer/photos/pb.100063699814178.-2207520000/3426171864062974/?type=3" target="_blank" class="gallery-item">
+                <img src="imgs/rpv1.jpg" class="gallery-img" style="object-fit: cover;">
+                <div class="gallery-info">
+                    <h3>Roleplay V1</h3>
+                    <p>Março de 2020 - Primeira versão do BraZuKas Roleplay!</p>
+                </div>
+            </a>
+
+            <a href="https://www.facebook.com/BraZukasServer/photos/pb.100063699814178.-2207520000/2183761241637382/?type=3" target="_blank" class="gallery-item">
+                <img src="imgs/encontro.jpg" class="gallery-img" style="object-fit: cover;">
+                <div class="gallery-info">
+                    <h3>Encontro de Carros</h3>
+                    <p>Junho de 2018 - Encontro de Carros no mapa!</p>
+                </div>
+            </a>
+
+            <a href="https://www.facebook.com/BraZukasServer/photos/pb.100063699814178.-2207520000/1682402151773296/?type=3" target="_blank" class="gallery-item">
+                <img src="imgs/100.png" class="gallery-img" style="object-fit: cover;">
+                <div class="gallery-info">
+                    <h3>Batemos 100 Jogadores!</h3>
+                    <p>Maio de 2017 - Recorde histórico de jogadores online simultâneos. Um marco incrível para nossa comunidade!</p>
+                </div>
+            </a>
+
+
+        </div>
+    </section>
+
+    <section class="features" id="sobre">
+        <h2>O que nos torna únicos</h2>
+        <p class="features-subtitle">Descubra por que você deve escolher o BraZuKas</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎭</div>
+                <h3>Roleplay de Verdade</h3>
+                <p>Esqueça servidores genéricos. Aqui cada ação tem consequência, cada decisão molda sua história. Documentos, fome, sede e um sistema realista que te coloca dentro do jogo.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💼</div>
+                <h3>Construa Seu Império</h3>
+                <p>De entregador de pizza a dono de empresa. De assaltante iniciante a líder do crime organizado. Seu caminho, suas escolhas, seu legado.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎯</div>
+                <h3>Economia que Funciona</h3>
+                <p>Dinheiro suado vale a pena. Sistema bancário completo, investimentos, propriedades e um mercado negro movimentado. Fique rico do jeito certo... ou errado.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stats-container">
+            <div class="stat-item">
+                <h3>99.9%</h3>
+                <p>Uptime</p>
+            </div>
+            <div class="stat-item">
+                <h3>24/7</h3>
+                <p>Suporte Online</p>
+            </div>
+            <div class="stat-item">
+                <h3>9 Anos</h3>
+                <p>De Experiência</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="regras">
+        <h2>Regras Principais</h2>
+        <p class="features-subtitle">Diretrizes para uma convivência saudável</p>
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>🎮 RP é Rei</h3>
+                <p>Aqui não é GTA Online. Bunny hop, DM e meta-gaming estragam a experiência de todos. Jogue com realismo e tenha o dobro da diversão.</p>
+            </div>
+            <div class="feature-card">
+                <h3>💬 Respeito Sempre</h3>
+                <p>Pode ser bandido no RP, mas seja gente boa fora dele. Desrespeito, racismo e toxicidade não têm lugar aqui. Ban sem aviso prévio.</p>
+            </div>
+            <div class="feature-card">
+                <h3>⚖️ Jogue Justo</h3>
+                <p>Cheats, hacks e bugs arruinam o jogo. Temos anti-cheat ativo e olhos em todo lugar. Trapaceou? Tchau para sempre.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Sobre Nós</h3>
+                <p>O BraZuKas é um servidor de roleplay que busca proporcionar a melhor experiência imersiva no MTA. Desde 2016 construindo histórias incríveis.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Links Rápidos</h3>
+                <a href="#loja">Loja VIP</a>
+                <a href="#regras">Regras</a>
+                <a href="#discord">Discord</a>
+                <a href="#forum">Fórum</a>
+            </div>
+            <div class="footer-section">
+                <h3>Comunidade</h3>
+                <a href="https://discord.gg/aRFAvMZYfq" target="_blank">Discord</a>
+                <a href="https://www.instagram.com/brazukaserver" target="_blank">Instagram</a>
+                <a href="https://www.facebook.com/BraZukasServer" target="_blank">Facebook</a>
+                <!-- <a href="#" target="_blank">YouTube</a> -->
+            </div>
+            <div class="footer-section">
+                <h3>Contato</h3>
+                <p>IP: mtasa://167.114.217.206:22563</p>
+                <p>Discord: https://discord.gg/aRFAvMZYfq</p>
+                <p>Email: contato@brazukasserver.com.br</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2016-2026 BraZuKas Roleplay Server. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Efeito parallax com movimento do mouse
+        const parallaxBg = document.querySelector('.parallax-bg');
+        const parallaxLayer = document.querySelector('.parallax-layer');
+
+        document.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX / window.innerWidth;
+            const mouseY = e.clientY / window.innerHeight;
+            
+            const moveX = (mouseX - 0.5) * 50;
+            const moveY = (mouseY - 0.5) * 50;
+            
+            parallaxLayer.style.background = `radial-gradient(circle at ${mouseX * 100}% ${mouseY * 100}%, rgba(79, 209, 197, 0.15) 0%, transparent 50%)`;
+            parallaxBg.style.transform = `translate(${moveX}px, ${moveY}px)`;
+        });
+
+        // Scroll suave
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Arrastar galeria com o mouse
+        const gallery = document.querySelector('.gallery-container');
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        gallery.addEventListener('mousedown', (e) => {
+            isDown = true;
+            gallery.style.cursor = 'grabbing';
+            startX = e.pageX - gallery.offsetLeft;
+            scrollLeft = gallery.scrollLeft;
+        });
+
+        gallery.addEventListener('mouseleave', () => {
+            isDown = false;
+            gallery.style.cursor = 'grab';
+        });
+
+        gallery.addEventListener('mouseup', () => {
+            isDown = false;
+            gallery.style.cursor = 'grab';
+        });
+
+        gallery.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - gallery.offsetLeft;
+            const walk = (x - startX) * 2;
+            gallery.scrollLeft = scrollLeft - walk;
+        });
+
+        gallery.style.cursor = 'grab';
+    </script>
+</body>
+</html>
